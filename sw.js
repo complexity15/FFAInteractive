@@ -1,4 +1,4 @@
-﻿const CACHE = 'ffa-interactive-v5';
+﻿const CACHE = 'ffa-interactive-v6';
 const SHELL = [
   './',
   'index.html',
@@ -55,6 +55,7 @@ self.addEventListener('fetch', event => {
     )
   );
 });
+
 
 
 
