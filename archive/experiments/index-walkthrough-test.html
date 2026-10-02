@@ -1,0 +1,2333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>We Grow Better Together | September 13, 2026 — Faith Fellowship Aurora</title>
+<style>
+  :root{
+    --parchment: #F6F1E7;
+    --ink: #2B2620;
+    --ink-soft: #5B5347;
+    --gold: #A9793F;
+    --sage: #6E7C5C;
+    --card: #FFFFFF;
+    --line: #E3D9C6;
+    --header-bg: #2B2620;
+  }
+  :root[data-theme="dark"]{
+    --parchment: #1E1B16;
+    --ink: #EDE6D6;
+    --ink-soft: #B8AF9C;
+    --gold: #D9A75C;
+    --sage: #8FA37A;
+    --card: #2A251E;
+    --line: #3D362B;
+    --header-bg: #14110D;
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin:0;
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    display:flex;
+    justify-content:center;
+    padding: 32px 16px 60px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .app{ width:100%; max-width: 760px; position:relative; }
+
+  .theme-toggle{
+    position:absolute;
+    top: 0;
+    right: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink-soft);
+    font-size: 15px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .theme-toggle:hover{ border-color: var(--gold); color: var(--gold); }
+
+  header{ margin-bottom: 22px; padding-right: 46px; }
+  header .eyebrow{
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+  }
+  header h1{
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    line-height: 1.2;
+  }
+
+  .stage{
+    position:relative;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    aspect-ratio: 16/9;
+    overflow:hidden;
+    box-shadow: 0 1px 3px rgba(43,38,32,0.06);
+  }
+  .slide{
+    position:absolute; inset:0;
+    display:none;
+    background-size: cover;
+    background-position: center;
+  }
+  .slide.active{ display:block; }
+
+  .slide.has-text::before{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.55));
+  }
+
+  .slide-content{
+    position:relative;
+    z-index:1;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding: 32px 40px;
+    color:#fff;
+  }
+  .slide-content h2{
+    font-family: Georgia, serif;
+    font-size: 26px;
+    margin: 0 0 14px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  }
+  .slide-content ul{
+    margin:0;
+    padding-left: 20px;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .verse-marker{
+    position:absolute;
+    background: rgba(43,38,32,0.85);
+    border: 1px solid var(--gold);
+    color: #F3D9A4;
+    font-size: 13px;
+    font-family: Georgia, serif;
+    font-style: italic;
+    padding: 5px 12px;
+    border-radius: 999px;
+    cursor:pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    z-index: 2;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .verse-marker:hover, .verse-marker.open{
+    background: var(--gold);
+    color: #2B2620;
+  }
+
+  .verse-tile{
+    position:absolute;
+    width: 240px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 14px 16px;
+    box-shadow: 0 6px 18px rgba(43,38,32,0.14);
+    display:none;
+    z-index: 10;
+  }
+  .verse-tile.show{ display:block; }
+  .verse-tile .ref{
+    font-size: 12px;
+    color: var(--gold);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .verse-tile .text{
+    font-family: Georgia, serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0;
+  }
+  .verse-tile .translation{
+    display:block;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+
+  .controls{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .nav-btns{ display:flex; gap:8px; flex-shrink: 0; }
+  button.nav{
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor:pointer;
+  }
+  button.nav:hover{ border-color: var(--gold); color: var(--gold); }
+  button.nav:disabled{ opacity: 0.35; cursor:default; }
+  .counter{ font-size: 13px; color: var(--ink-soft); flex: 1 1 auto; text-align: center; min-width: 90px; }
+
+  /* Voice button is always shown. Notes button appears when notes[] exist. */
+  .action-btns{ display:flex; gap:8px; flex-wrap: wrap; justify-content: flex-end; }
+  .voice-btn, .notes-btn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border: 1px solid var(--sage);
+    background: var(--card);
+    color: var(--sage);
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor:pointer;
+    white-space: nowrap;
+  }
+  .voice-btn:hover, .notes-btn:hover{ background: var(--sage); color: #fff; }
+  .voice-btn[hidden], .notes-btn[hidden]{ display:none; }
+
+  .thumbs{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+    gap: 6px;
+    margin-top: 14px;
+    padding-bottom: 4px;
+  }
+  .thumb-row-break{ display: none; }
+  .thumb{
+    min-width: 0;
+    height: 38px;
+    padding: 0 4px;
+    border-radius: 4px;
+    background: var(--line);
+    border: 2px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .thumb.active{ border-color: var(--gold); color: var(--ink); }
+  /* Introduction thumb can span a bit wider when labeled */
+  .thumb[data-goto="0"]{
+    grid-column: span 2;
+    font-size: 11px;
+  }
+  .thumb-group{ display: contents; }
+  .thumb-group-toggle{ display:none; }
+  .thumb-group-items{ display:contents; }
+
+  /* ---- Floating, draggable popup shell — used for TWO independent
+     popups (video clip + sermon notes) so both can be open and moved
+     around the screen at the same time. ---- */
+  .floating-popup{
+    position: fixed;
+    max-width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: 0 12px 32px rgba(43,38,32,0.28);
+    z-index: 1000;
+    display:none;
+    overflow:hidden;
+    flex-direction: column;
+  }
+  .floating-popup.show{ display:flex; }
+  #video-popup{ width: 640px; }
+  #notes-popup{ width: 420px; height: 320px; }
+
+  .resize-handle{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 18px;
+    height: 18px;
+    cursor: nwse-resize;
+    z-index: 5;
+    touch-action: none;
+  }
+  .resize-handle::before{
+    content: "";
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--ink-soft);
+    border-bottom: 2px solid var(--ink-soft);
+    opacity: 0.7;
+  }
+  .resize-handle:hover::before{ border-color: var(--gold); opacity: 1; }
+  .floating-popup-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 12px 10px 12px 14px;
+    background: var(--header-bg);
+    color: #fff;
+    font-size: 13px;
+    cursor: move;
+    user-select: none;
+    touch-action: none;
+    flex-shrink: 0;
+  }
+  .floating-popup-header .drag-hint{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    color: rgba(255,255,255,0.75);
+    font-size: 12px;
+  }
+  .floating-popup-close{
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+  }
+  .floating-popup-close:hover{ background: rgba(255,255,255,0.15); }
+
+  .video-popup-body{
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 160px;
+    aspect-ratio: 16/9;
+    background: #000;
+    position: relative;
+  }
+  #video-popup.resized .video-popup-body{ aspect-ratio: auto; }
+  #yt-player{ width:100%; height:100%; }
+  .video-empty{
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+    background: var(--card);
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .video-empty.show{ display: flex; }
+  .video-empty strong{
+    display: block;
+    color: var(--ink);
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .notes-popup-body{
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 80px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background: var(--card);
+    padding: 18px 20px;
+  }
+  .notes-popup-body ul{
+    margin: 0;
+    padding-left: 20px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+  .notes-popup-body li{ margin-bottom: 8px; }
+  .notes-popup-body .empty-note{
+    color: var(--ink-soft);
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  /* ---- Mobile layout fixes ---- */
+  @media (max-width: 560px){
+    body{ padding: 12px 10px 32px; }
+    header{ margin-bottom: 12px; padding-right: 40px; }
+    header h1{ font-size: 19px; line-height: 1.25; }
+    header .eyebrow{ font-size: 11px; }
+    .theme-toggle{ width: 32px; height: 32px; font-size: 14px; }
+
+    .stage{ border-radius: 4px; }
+
+    .controls{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .counter{
+      grid-column: 1 / -1;
+      text-align: center;
+      font-size: 12px;
+      order: 0;
+      min-width: 0;
+    }
+    .nav-btns{
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    button.nav{
+      width: 100%;
+      text-align: center;
+      padding: 10px 8px;
+    }
+    .action-btns{
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .voice-btn, .notes-btn{
+      width: 100%;
+      justify-content: center;
+      padding: 10px 8px;
+      font-size: 13px;
+    }
+
+    .thumbs{
+      grid-template-columns: repeat(6, 1fr);
+      gap: 5px;
+      margin-top: 12px;
+    }
+    .thumb{
+      height: 34px;
+      font-size: 11px;
+      padding: 0 2px;
+    }
+    .thumb[data-goto="0"]{
+      grid-column: span 2;
+      font-size: 10px;
+    }
+
+    .my-notes-link{
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+
+    /* Default compact size on phones; user can resize via the corner handle */
+    #notes-popup{
+      width: min(420px, calc(100vw - 24px));
+      height: 42vh;
+    }
+    .notes-popup-body{
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    #video-popup{
+      width: min(640px, calc(100vw - 24px));
+    }
+  }
+
+  @media (max-width: 380px){
+    .thumbs{ grid-template-columns: repeat(5, 1fr); }
+    .action-btns{ grid-template-columns: 1fr; }
+    header h1{ font-size: 17px; }
+    #notes-popup{ height: 38vh; }
+  }
+
+  /* ---- "Write your thoughts" — personal notes, autosaved + downloadable ---- */
+  .my-notes-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top: 10px;
+    background:none;
+    border:none;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-family: inherit;
+    cursor:pointer;
+    padding: 4px 2px;
+    text-decoration: underline;
+    text-decoration-color: var(--line);
+    text-underline-offset: 3px;
+  }
+  .my-notes-link:hover{ color: var(--gold); text-decoration-color: var(--gold); }
+
+  .notes-modal-overlay{
+    position: fixed; inset:0;
+    background: transparent;
+    z-index: 1500;
+    display:none;
+    padding: 20px;
+    pointer-events: none;
+  }
+  .notes-modal-overlay.show{ display:block; }
+  .notes-modal{ pointer-events: auto; }
+  .notes-modal-overlay.minimized{
+    background: transparent;
+    pointer-events: none;
+  }
+  .notes-modal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 92vw;
+    max-width: 520px;
+    height: min(520px, 85vh);
+    max-height: calc(100vh - 16px);
+    background: var(--card);
+    border-radius: 8px;
+    box-shadow: 0 16px 40px rgba(43,38,32,0.3);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .notes-modal-overlay.minimized .notes-modal{ display:none; }
+  .notes-modal-overlay.minimizing{ background: transparent; }
+  .notes-modal-overlay.minimizing .notes-modal{
+    animation: notes-modal-minimize 0.32s ease-in forwards;
+    pointer-events: none;
+  }
+  .notes-modal-restored{
+    animation: notes-modal-restore 0.28s ease-out;
+  }
+  @keyframes notes-modal-minimize{
+    from{ opacity: 1; transform: translate(0, 0) scale(1); }
+    to{
+      opacity: 0;
+      transform: translate(var(--minimize-x), var(--minimize-y)) scale(0.15);
+    }
+  }
+  @keyframes notes-modal-restore{
+    from{ opacity: 0; transform: scale(0.82); }
+    to{ opacity: 1; transform: scale(1); }
+  }
+  .notes-modal-minimized{
+    position: fixed;
+    left: auto;
+    top: auto;
+    right: 14px;
+    bottom: 14px;
+    width: 42px;
+    height: 42px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(217,167,92,0.75);
+    border-radius: 50%;
+    background: rgba(43,38,32,0.72);
+    color: #F3D9A4;
+    box-shadow: 0 6px 18px rgba(43,38,32,0.28);
+    font-size: 25px;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 1;
+  }
+  .notes-modal-minimized:hover{
+    background: rgba(169,121,63,0.9);
+    color: var(--ink);
+  }
+  .notes-modal-overlay.minimized .notes-modal-minimized{ display:flex; }
+  .notes-modal-minimized[title]{ cursor: pointer; }
+  .notes-modal-header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 14px 18px;
+    background: var(--header-bg);
+    color:#fff;
+    cursor: move;
+    user-select: none;
+    touch-action: none;
+    flex-shrink: 0;
+  }
+  .notes-modal-header h3{
+    display:flex; align-items:center; gap:8px;
+  }
+  .notes-modal-header .drag-hint{
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.6);
+  }
+  .notes-modal-header h3{ margin:0; font-size:15px; font-family: Georgia, serif; font-weight:600; }
+  .notes-modal-close{
+    background:transparent; border:none; color:#fff; font-size:16px; cursor:pointer; padding:4px 6px; border-radius:4px;
+  }
+  .notes-modal-close:hover{ background: rgba(255,255,255,0.15); }
+  .notes-modal-minimize{
+    margin-left: auto;
+    margin-right: 4px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    line-height: 1;
+    line-height: 1;
+    cursor: pointer;
+    padding: 3px 6px;
+    border-radius: 4px;
+  }
+  .notes-modal-minimize:hover{ background: rgba(255,255,255,0.15); }
+  .notes-modal-body{
+    padding: 16px 18px;
+    overflow-y:auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .notes-modal-body textarea{
+    width:100%;
+    flex: 1 1 auto;
+    min-height: 120px;
+    resize: none;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 12px;
+    font-family: Georgia, serif;
+    font-size: 14px;
+    line-height:1.6;
+    color: var(--ink);
+    background: var(--parchment);
+    box-sizing: border-box;
+  }
+  .notes-modal-body textarea:focus{ outline: 2px solid var(--gold); outline-offset:1px; }
+  .notes-save-hint{
+    font-size:12px; color: var(--ink-soft); margin-top:6px;
+  }
+  .notes-modal-footer{
+    display:flex; gap:10px; flex-wrap:wrap;
+    padding: 12px 18px 16px;
+    border-top: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .notes-download-btn{
+    flex:1;
+    min-width: 140px;
+    border:1px solid var(--sage);
+    background: var(--card);
+    color: var(--sage);
+    padding:9px 10px;
+    border-radius:4px;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .notes-download-btn:hover{ background: var(--sage); color:#fff; }
+  .notes-email-note{
+    margin: 0 18px 16px;
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    flex-shrink: 0;
+  }
+
+  .discussion-guide-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin: 10px 12px 0 0;
+    background:none;
+    border:none;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-family: inherit;
+    cursor:pointer;
+    padding: 4px 2px;
+    text-decoration: underline;
+    text-decoration-color: var(--line);
+    text-underline-offset: 3px;
+  }
+  .discussion-guide-link:hover{ color: var(--gold); text-decoration-color: var(--gold); }
+  #discussion-guide-popup{ width: 560px; height: min(420px, 70vh); }
+  .guide-popup-body{
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 20px 22px;
+    color: var(--ink);
+    background: var(--card);
+  }
+  .guide-auth{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    max-width:360px;
+    margin: 20px auto;
+  }
+  .guide-auth h3, .guide-content h3{ margin:0; font-family:Georgia,serif; color:var(--ink); }
+  .guide-auth p{ margin:0; color:var(--ink-soft); line-height:1.5; }
+  .guide-password{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:10px 12px;
+    color:var(--ink);
+    background:var(--parchment);
+    font: inherit;
+  }
+  .guide-password:focus{ outline:2px solid var(--gold); outline-offset:1px; }
+  .guide-submit, .guide-download{
+    border:1px solid var(--sage);
+    background:var(--card);
+    color:var(--sage);
+    padding:9px 12px;
+    border-radius:4px;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .guide-new-tab{
+    border:1px solid var(--gold);
+    background:var(--card);
+    color:var(--gold);
+    padding:9px 12px;
+    border-radius:4px;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .guide-new-tab:hover{ background:var(--gold); color:var(--ink); }
+  .guide-submit:hover, .guide-download:hover{ background:var(--sage); color:#fff; }
+  .guide-error{ min-height:18px; color:#A34A3A; font-size:12px; }
+  .guide-content[hidden], .guide-auth[hidden], .guide-footer[hidden]{ display:none; }
+  .guide-content h2{ margin:0 0 4px; font-family:Georgia,serif; font-size:22px; }
+  .guide-subtitle{ margin:0 0 18px; color:var(--ink-soft); font-size:13px; }
+  .guide-section{ border-top:1px solid var(--line); padding-top:14px; margin-top:16px; }
+  .guide-section h3{ font-size:16px; margin-bottom:8px; color:var(--gold); }
+  .guide-section p{ margin:0 0 10px; line-height:1.6; font-size:14px; }
+  .guide-footer{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    padding:10px 18px 12px;
+    border-top:1px solid var(--line);
+    flex-shrink:0;
+  }
+  @media (max-width:560px){
+    #discussion-guide-popup{ width:calc(100vw - 24px); height:min(360px, 42vh); }
+    .guide-popup-body{ padding:16px; }
+  }
+
+  @media (max-width: 480px){
+    .notes-modal-footer{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:8px;
+    }
+    .notes-download-btn{
+      min-width: 0;
+      flex: 0 0 auto;
+      width: 100%;
+      font-size: 12px;
+      padding: 10px 8px;
+    }
+    .my-notes-link,
+    .discussion-guide-link{
+      display:flex;
+      width:max-content;
+      max-width:calc(100% - 24px);
+      margin-left:auto;
+      margin-right:auto;
+      justify-content:center;
+    }
+  }
+
+  @media (max-width: 560px){
+    .thumbs{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .thumb-group{
+      display:block;
+    }
+    .thumb-group-toggle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      width:100%;
+      min-height:34px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:4px;
+      background:var(--card);
+      color:var(--ink-soft);
+      font:inherit;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .thumb-group-toggle::after{ content:'▸'; color:var(--gold); }
+    .thumb-group.open .thumb-group-toggle{
+      border-color:var(--gold);
+      color:var(--ink);
+    }
+    .thumb-group.open .thumb-group-toggle::after{ content:'▾'; }
+    .thumb-group-items{
+      display:none;
+      grid-template-columns:repeat(6, minmax(0, 1fr));
+      gap:5px;
+      margin-top:5px;
+    }
+    .thumb-group.open .thumb-group-items{ display:grid; }
+    .thumb-group-items .thumb{ width:auto; }
+  }
+  .walkthrough-overlay{
+    position:fixed; inset:0; z-index:1000; background:transparent;
+    display:none; pointer-events:auto;
+  }
+  .walkthrough-overlay.show{ display:block; }
+  .walkthrough-spotlight{
+    position:fixed; z-index:1001; pointer-events:none; border-radius:6px;
+    box-shadow:0 0 0 4px var(--gold), 0 0 0 9999px rgba(20,17,13,.58);
+    transition:top .2s ease,left .2s ease,width .2s ease,height .2s ease;
+  }
+  .walkthrough-card{
+    position:fixed; z-index:1002; width:min(360px,calc(100vw - 28px));
+    padding:18px 18px 14px; border:1px solid var(--gold); border-radius:6px;
+    background:var(--card); color:var(--ink); box-shadow:0 10px 30px rgba(0,0,0,.25);
+  }
+  .walkthrough-card h2{ margin:0 0 8px; font:600 21px/1.25 Georgia,serif; }
+  .walkthrough-card p{ margin:0 0 14px; color:var(--ink-soft); font-size:14px; line-height:1.5; }
+  .walkthrough-progress{ margin-bottom:12px; color:var(--gold); font-size:12px; }
+  .walkthrough-actions{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .walkthrough-actions button{
+    border:1px solid var(--line); border-radius:4px; padding:8px 11px;
+    background:var(--card); color:var(--ink); cursor:pointer; font:inherit; font-size:13px;
+  }
+  .walkthrough-actions .walkthrough-next{ background:var(--sage); border-color:var(--sage); color:#fff; }
+  .walkthrough-actions button:hover{ border-color:var(--gold); }
+  .walkthrough-dismiss{ display:flex; align-items:center; gap:6px; margin-top:13px; color:var(--ink-soft); font-size:11px; }
+  .walkthrough-dismiss input{ accent-color:var(--sage); }
+  .walkthrough-help{
+    position:absolute; top:0; right:42px; width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--line); background:var(--card); color:var(--gold);
+    font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .walkthrough-help:hover{ border-color:var(--gold); background:var(--parchment); }
+  @media (max-width:560px){
+    .walkthrough-card{ padding:15px 15px 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+  <button class="walkthrough-help" id="walkthrough-help" aria-label="Open interactive sermon tour" title="Open interactive sermon tour">💡</button>
+
+  <header>
+    <div class="eyebrow">Faith Fellowship Aurora — Sermon Archive</div>
+    <h1>We Grow Better Together | September 13, 2026</h1>
+  </header>
+
+  <div class="stage" id="stage">
+    <!-- Slides are rendered here by JS from the `slides` config below -->
+    <div class="verse-tile" id="verse-tile">
+      <div class="ref" id="verse-ref"></div>
+      <p class="text" id="verse-text"></p>
+      <span class="translation">ESV</span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="nav-btns">
+      <button class="nav" id="prev-btn">← Prev</button>
+      <button class="nav" id="next-btn">Next →</button>
+    </div>
+    <div class="counter" id="counter">Slide 1 of 1</div>
+    <div class="action-btns">
+      <button class="voice-btn" id="voice-btn">▶ Hear this slide</button>
+      <button class="notes-btn" id="notes-btn" hidden>📝 Read Sermon Notes</button>
+    </div>
+  </div>
+
+  <div class="thumbs" id="thumbs"></div>
+
+    <button class="my-notes-link" id="my-notes-link">&#9998; Write your thoughts here</button>
+    <button class="discussion-guide-link" id="discussion-guide-link">&#128274; Discussion Guide Access</button>
+
+</div>
+
+<!-- Two independent floating popups: video clip and sermon notes.
+     Both can be open and dragged around at the same time. -->
+<div class="floating-popup" id="video-popup">
+  <div class="floating-popup-header" id="video-popup-header">
+    <span class="drag-hint">⠿ Drag to move</span>
+    <button class="floating-popup-close" id="video-popup-close" aria-label="Close">✕</button>
+  </div>
+  <div class="video-popup-body">
+    <div id="yt-player"></div>
+    <div class="video-empty" id="video-empty">
+      <div>
+        <strong>No video/audio available for this slide</strong>
+        A recording is not linked for this portion of the sermon.
+      </div>
+    </div>
+  </div>
+  <div class="resize-handle" id="video-resize-handle" aria-label="Resize"></div>
+</div>
+
+<div class="floating-popup" id="notes-popup">
+  <div class="floating-popup-header" id="notes-popup-header">
+    <span class="drag-hint">⠿ Drag to move</span>
+    <button class="floating-popup-close" id="notes-popup-close" aria-label="Close">✕</button>
+  </div>
+  <div class="notes-popup-body" id="notes-popup-body"></div>
+  <div class="resize-handle" id="notes-resize-handle" aria-label="Resize"></div>
+</div>
+
+<div class="floating-popup" id="discussion-guide-popup">
+    <div class="floating-popup-header" id="discussion-guide-header">
+      <span class="drag-hint">⠿ Drag to move</span>
+      <button class="floating-popup-close" id="discussion-guide-close" aria-label="Close">✕</button>
+    </div>
+    <div class="guide-popup-body">
+      <div class="guide-auth" id="guide-auth">
+        <h3>Discussion Guide Access</h3>
+        <p>Enter the leader password to open the discussion guide.</p>
+        <input class="guide-password" id="guide-password" type="password" autocomplete="off" placeholder="Password" aria-label="Discussion guide password">
+        <button class="guide-submit" id="guide-submit">Unlock guide</button>
+        <div class="guide-error" id="guide-error" role="alert"></div>
+      </div>
+      <article class="guide-content" id="guide-content" hidden>
+        <h2>FG Lesson and Personal Reflection Guide</h2>
+        <p class="guide-subtitle">Based on the message “We Grow Better Together”<br>By Ptr Eniong Hilario and Ptr Leo Bonavente</p>
+        <section class="guide-section">
+          <h3>Celebration</h3>
+          <p>What has God done in your life lately that you would like to celebrate and thank Him for?</p>
+          <p>Last time, we challenged ourselves to share our Jesus story with at least one person. Were you able to do it? Would you like to share what happened?</p>
+        </section>
+        <section class="guide-section">
+          <h3>Challenges</h3>
+          <p>What challenges did you face with regard to sharing your story to someone?</p>
+        </section>
+        <section class="guide-section">
+          <h3>Content</h3>
+          <p><strong>Read:</strong> Hebrews 10:19–25; Ephesians 4:15–16</p>
+          <p><strong>We Grow Better Together</strong></p>
+          <p>God never intended the Christian life to be lived alone. The church is more than a building we enter or a service we attend—it is a community of people who follow Jesus together. We need people who will encourage us, strengthen us, challenge us, and sometimes lovingly correct us. We cannot fully grow into Christlikeness by ourselves. We need one another, because we grow better together.</p>
+          <p>This life together begins with what Jesus has done for us. Through His blood, Jesus opened a new and living way for us to come into God’s presence, and He became our great High Priest. Because of Him, we can now draw near to God with confidence and full assurance of faith. Our confidence is not based on our goodness or accomplishments, but entirely on what Christ has accomplished for us. Jesus brought us to God—and in doing so, He also brought us together as His people (Hebrews 10:19–25; Hebrews 4:14–16).</p>
+          <p>Because we belong to Christ, we are called to encourage one another. Hebrews tells us to “consider how to stir up one another to love and good works” and not to neglect meeting together (Hebrews 10:24–25). Encouragement is more than saying kind words. We encourage others when we inspire them toward love and good deeds, when we gather faithfully, and when we come alongside those who are struggling. Sometimes simply showing up is already a powerful encouragement. Our presence says, “I’m still here. I’m still following Jesus. And we’re in this together.”</p>
+          <p>But growing together requires more than encouragement. We also need people who will speak the truth to us in love. Paul writes, “speaking the truth in love, we are to grow up in every way into him…Christ” (Ephesians 4:15–16). Sometimes we need someone to remind us of God’s promises. Sometimes we need someone to tell us not to believe a lie. And sometimes we need someone who loves us enough to say, “You’re going in the wrong direction. Let’s go back to God’s Word.” Truth spoken in love helps us become more like Jesus.</p>
+          <p>We especially need this because we all have blind spots—areas in our lives that others may see more clearly than we do. David needed Nathan to confront him about his sin. When Nathan courageously told him, “You are the man!” David was finally brought face-to-face with what he had done (2 Samuel 12:1–7). In the same way, we sometimes need a “Nathan”—someone who loves God and loves us enough to tell us what we cannot see ourselves. But receiving truth also requires humility and courage: humility to listen instead of becoming defensive, and courage to admit when we are wrong and allow God to change us.</p>
+          <p>This is God’s beautiful design for Christian community. We need both truth and love. Truth without love can become harsh; love without truth can become shallow. But when truth and love come together, we help one another grow toward Christlikeness (Ephesians 4:15–16). So let us become people who encourage those who are struggling, lovingly correct those who are drifting, and humbly receive truth when others speak into our lives. We need each other to become more like Jesus. We were never meant to grow alone. We grow together—and we grow better together.</p>
+        </section>
+        <section class="guide-section">
+          <h3>Discuss</h3>
+          <p>How did the message speak to you?</p>
+          <p>In what ways can we as a faith group apply the message?</p>
+        </section>
+        <section class="guide-section">
+          <h3>Commit</h3>
+          <p>What are you personally committing to do to apply the message to your life? We will follow up on this next meeting.</p>
+          <p>Let us also continue in our commitment to share the gospel, or share our story to at least one person.</p>
+        </section>
+      </article>
+    </div>
+    <div class="guide-footer" id="guide-footer" hidden>
+      <button class="guide-download" id="guide-download">Download as Word</button>
+      <button class="guide-new-tab" id="guide-new-tab">Open in new tab</button>
+    </div>
+    <div class="resize-handle" id="discussion-guide-resize-handle" aria-label="Resize"></div>
+</div>
+
+<div class="walkthrough-overlay" id="walkthrough-overlay" aria-hidden="true">
+  <div class="walkthrough-spotlight" id="walkthrough-spotlight"></div>
+  <section class="walkthrough-card" id="walkthrough-card" role="dialog" aria-modal="true" aria-labelledby="walkthrough-title">
+    <h2 id="walkthrough-title"></h2>
+    <p id="walkthrough-description"></p>
+    <div class="walkthrough-actions">
+      <button id="walkthrough-skip" type="button">Skip tour</button>
+      <div>
+        <button id="walkthrough-back" type="button">Back</button>
+        <button class="walkthrough-next" id="walkthrough-next" type="button">Next</button>
+      </div>
+    </div>
+    <label class="walkthrough-dismiss"><input id="walkthrough-dismiss" type="checkbox"> Do not show this again</label>
+  </section>
+</div>
+
+<!-- "Write your thoughts" modal -->
+<div class="notes-modal-overlay" id="notes-modal-overlay">
+  <div class="notes-modal">
+    <div class="notes-modal-header" id="notes-modal-header">
+      <h3>Your Thoughts <span class="drag-hint">&#10021; drag to move</span></h3>
+    <button class="notes-modal-minimize" id="notes-modal-minimize" aria-label="Minimize thoughts">−</button>
+    <button class="notes-modal-close" id="notes-modal-close" aria-label="Close">&#10005;</button>
+  </div>
+    <div class="notes-modal-body">
+      <textarea id="my-notes-textarea" placeholder="Jot down anything that stood out to you during this sermon..."></textarea>
+      <div class="notes-save-hint" id="notes-save-hint">Saved automatically on this device.</div>
+    </div>
+    <div class="notes-modal-footer">
+      <button class="notes-download-btn" id="copy-notes-btn">Copy to clipboard</button>
+      <button class="notes-download-btn" id="download-txt-btn">Download as .txt</button>
+      <button class="notes-download-btn" id="download-word-btn">Download as Word</button>
+      <button class="notes-download-btn" id="email-notes-btn">Email me a copy</button>
+    </div>
+    <p class="notes-email-note">"Email me a copy" opens your own mail app with the notes filled in &mdash; you still hit send. Very long notes may get trimmed by some mail apps.</p>
+    <div class="resize-handle" id="thoughts-resize-handle" aria-label="Resize"></div>
+  </div>
+  <button class="notes-modal-minimized" id="notes-modal-minimized" aria-label="Restore thoughts" title="Restore thoughts">&#9998;</button>
+</div>
+
+<script>
+  // =========================================================
+  // SLIDE CONFIG — edit per week
+  //
+  // Video and notes are NOT mutually exclusive. Set startSeconds/
+  // endSeconds if a YouTube recording covers this slide, set notes[] if
+  // the pastor's notes doc covers it, set BOTH if both source materials
+  // exist for this slide — the matching button(s) appear automatically.
+  //
+  // If using notes: view each slide image directly (PPT text usually
+  // isn't extractable) and cross-reference the notes/manuscript doc to
+  // find the matching section. Summarize into 2-5 bullets, staying close
+  // to the pastor's original wording rather than a heavy rewrite.
+  //
+  // background: relative filename (e.g. "slide-02.jpg", bundled in the
+  //   same Cloudflare deploy folder) OR a full i.imgur.com URL
+  // markers: optional verse tags — see slide-config-reference.md in
+  //   project Knowledge for the full field list
+  // =========================================================
+  const slides = [
+    {
+      background: "slide-01.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "This series, \"Growing Together, Reaching Together,\" began by looking at the importance of the church — the community God calls every believer to belong to.",
+        "The church is more than a building we enter or a service we attend — it is a family of people who follow Jesus and walk with Him together.",
+        "God never intended us to grow in our faith by ourselves. We need people who walk with us, encourage us, strengthen us, challenge us, and sometimes correct us.",
+        "We will never fully grow into Christlikeness on our own. We grow together — and we grow better together.",
+        "This is Christ's design for His people: what Jesus accomplished has a two-fold purpose — He brings us into a relationship with God, and He brings us into a relationship with one another."
+      ],
+      voiceLabel: "Listen to Introduction",
+      thumbLabel: "Introduction"
+    },
+    {
+      background: "slide-02.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Today's message: We Grow Better Together.",
+        "What Jesus accomplished has a two-fold purpose — He brings us into a relationship with God, and into relationship with one another."
+      ]
+    },
+    {
+      background: "slide-03.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Hebrews 10:19–25 shows what Jesus has already done for us.",
+        "The passage splits into two parts: verses 19–21 tell us what Jesus has done; verses 22–25 tell us how we should live because of it.",
+        "In short: Jesus opened a new and living way to enter God's presence by becoming our Great High Priest."
+      ]
+    },
+    {
+      background: "slide-04.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Hebrews 10:19 — we now have confidence to enter the Most Holy Place by the blood of Jesus.",
+        "There was a time when approaching God was marked by fear, since our sin gave us no right to stand before a holy God. But Jesus changed everything.",
+        "Because of what Jesus accomplished, we can now come to God with confidence and full assurance — not because we're good enough or have earned it, but because of what Jesus has done."
+      ]
+    },
+    {
+      background: "slide-05.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Hebrews 10:20 — Jesus opened for us \"a new and living way\" into God's presence.",
+        "Under the old covenant, people approached God through priests and repeated animal sacrifices. But Jesus offered Himself instead — the perfect and final sacrifice.",
+        "Unlike the old sacrifices, Jesus offered Himself once and for all. His sacrifice was complete and does not need to be repeated.",
+        "We come to God not through our own efforts or good works, but through Jesus."
+      ]
+    },
+    {
+      background: "slide-06.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Hebrews 10:21 — we have a great high priest over the house of God.",
+        "Jesus becoming our great High Priest means He can make propitiation for our sins — a sacrifice that satisfies God's righteous judgment and turns away His wrath (Hebrews 2:17).",
+        "Because Jesus was tempted in every way as we are, yet without sin, He can sympathize with our weaknesses (Hebrews 4:15).",
+        "Because of this, we can draw near to the throne of grace with confidence, to receive mercy and find grace to help in our time of need (Hebrews 4:16)."
+      ]
+    },
+    {
+      background: "slide-07.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Hebrews 10:22 — \"Let us draw near with a true heart in full assurance of faith, with our hearts sprinkled clean... and our bodies washed with pure water.\"",
+        "The passage doesn't just say \"you draw near\" — it says \"let us.\" Our relationship with Jesus is personal, but it was never meant to be lived alone."
+      ]
+    },
+    {
+      background: "slide-08.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Hebrews 10:23 — \"Let us hold fast the confession of our hope without wavering, for he who promised is faithful.\""
+      ]
+    },
+    {
+      background: "slide-09.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Hebrews 10:24 — \"Let us consider how to stir up one another to love and good works.\""
+      ]
+    },
+    {
+      background: "slide-10.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Hebrews 10:25 — \"not neglecting to meet together... but encouraging one another, and all the more as you see the Day drawing near.\"",
+        "Jesus brings us into relationship with God, but He also brings us into a community — His church. In this community, we help one another grow. We grow better together."
+      ]
+    },
+    {
+      background: "slide-11.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "So what did Jesus do? He opened a new and living way to enter God's presence by becoming our Great High Priest."
+      ]
+    },
+    {
+      background: "slide-12.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Hebrews 2:17 — Jesus had to be made like us in every respect, so He could become a merciful and faithful high priest and make propitiation for our sins.",
+        "Propitiation means a sacrifice that satisfies God's righteous judgment against sin and turns away His wrath. On the cross, Jesus took upon Himself the judgment our sins deserved."
+      ]
+    },
+    {
+      background: "slide-13.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Hebrews 4:15 — we do not have a high priest unable to sympathize with our weaknesses, but one who was tempted in every way as we are, yet without sin."
+      ]
+    },
+    {
+      background: "slide-14.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "So what did Jesus do? He opened a new and living way to enter God's presence by becoming our Great High Priest."
+      ]
+    },
+    {
+      background: "slide-15.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Hebrews 10:22–24 repeatedly says \"Let us\" — \"Let us draw near... Let us hold unswervingly... Let us consider how we may spur one another on.\"",
+        "There is an important truth here: our relationship with Jesus is personal, but it was never meant to be lived alone."
+      ]
+    },
+    {
+      background: "slide-16.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Jesus brings us into relationship with God, but He also brings us into a community — His church. And in this community, we help one another grow. We grow better together."
+      ]
+    },
+    {
+      background: "slide-17.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "So how does this actually happen? Our growth is impacted by the people around us."
+      ]
+    },
+    {
+      background: "slide-18.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "In the church, we grow together when we find ways to encourage one another. Encouragement plays an important role in our growth and maturity.",
+        "Hebrews 10:24–25 gives us three simple ways to encourage one another."
+      ]
+    },
+    {
+      background: "slide-19.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Hebrews 10:24 — \"let us consider how we may spur one another on toward love and good deeds.\""
+      ]
+    },
+    {
+      background: "slide-20.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Hebrews 10:25 — \"not giving up meeting together... but encouraging one another, all the more as you see the Day approaching.\""
+      ]
+    },
+    {
+      background: "slide-21.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "One: we encourage one another by becoming a positive spiritual influence.",
+        "\"Let us consider\" means giving something careful, serious thought — being intentional in stimulating others toward love and good deeds.",
+        "This is more than just avoiding being a bad influence — it's inspiring, challenging, and lovingly pushing one another toward being and doing good."
+      ]
+    },
+    {
+      background: "slide-22.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Two: we encourage one another by gathering together.",
+        "Sometimes encouragement is simply showing up. We often think of encouragement as something we say, but Hebrews reminds us it can also be something we do.",
+        "When you come to worship even though you're tired, or join your small group after a difficult week, you're saying without speaking: \"I'm still here. I'm still following Jesus. And we're in this together.\"",
+        "Your presence is a big encouragement."
+      ]
+    },
+    {
+      background: "slide-23.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Three: we encourage one another by coming alongside each other with support and encouragement.",
+        "This can mean encouraging someone who is discouraged, comforting someone who is hurting, or urging someone who is growing spiritually weak to keep going — especially important as we draw nearer to the day of the Lord's coming.",
+        "It might sound like: \"I know you're struggling, but don't give up. God is faithful. I'm walking with you.\""
+      ]
+    },
+    {
+      background: "slide-24.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Sometimes growing means having someone who loves us enough to encourage us. But sometimes growing means having someone who loves us enough to tell the truth about us. We need both."
+      ]
+    },
+    {
+      background: "slide-25.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Ephesians 4:15 — \"speaking the truth in love, we are to grow up in every way into him who is the head, into Christ.\""
+      ]
+    },
+    {
+      background: "slide-26.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Ephesians 4:16 — from Christ, the whole body, joined and held together by every joint, grows and builds itself up in love as each part does its work.",
+        "Paul doesn't picture Christians growing on their own — we are connected to Christ, and also to one another. When each part does its work, the whole body grows and becomes stronger."
+      ]
+    },
+    {
+      background: "slide-27.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "We grow together when we lovingly speak truth to one another. \"Speaking the truth\" means more than saying something factually correct — it includes being truthful and helping one another walk in the truth.",
+        "We need people who will lovingly point us back to what is true — reminding us of God's promises, telling us not to believe a lie, or calling us back when we're walking in the wrong direction."
+      ]
+    },
+    {
+      background: "slide-28.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "We all have blind spots — areas others can see in us that we cannot see ourselves. It may be an attitude, a habit, a weakness, or how we treat others.",
+        "David needed a Nathan (2 Samuel 11–12): after David's sin with Bathsheba, God sent the prophet Nathan, who told David a story and then said, \"You are the man!\" David could see sin in someone else's story, but not in himself.",
+        "We sometimes need a \"Nathan\" too — someone who loves God and loves us enough to say, \"There's something here you may not be seeing.\"",
+        "Without anyone speaking truth into our lives, we can begin to believe our own press — convinced our way is always right — and instead of growing, we can actually regress."
+      ]
+    },
+    {
+      background: "slide-29.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Speaking the truth in love is only one side. For truth to help us grow, we must also be willing to receive it.",
+        "It takes humility to admit, \"Maybe there's something here I need to see.\" When we become defensive, make excuses, or refuse to listen, we close ourselves off from growth.",
+        "It also takes courage — to hear something we may not want to hear, to face our weaknesses, and to admit, \"I was wrong.\""
+      ]
+    },
+    {
+      background: "slide-30.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "Humility allows us to hear the truth. Courage enables us to face the truth. And God's grace helps us respond to the truth.",
+        "We need both truth and love. Truth without love can become harsh; love without truth can become shallow. When truth and love come together, we help one another become more like Christ."
+      ]
+    },
+    {
+      background: "slide-31.jpg",
+      heading: "",
+      bullets: [],
+      notes: [
+        "God never intended us to grow in Christ alone — we grow better together.",
+        "Because of what Jesus has done, He opened a new and living way for us to come confidently into God's presence — not because of our goodness, but because of His finished work on the cross.",
+        "Because we belong to Christ, we also belong to one another as His church. We help each other grow by encouraging one another, being a positive influence, simply being present, and coming alongside each other — especially those who are struggling.",
+        "We also grow together when we lovingly speak truth into one another's lives, especially in areas we cannot see ourselves.",
+        "We need one another to grow, mature, and become more like Jesus."
+      ]
+    }
+  ];
+
+  // Verse text lookup — keyed by the `verseKey` used in any slide's `markers`
+  const verses = {};
+
+  // Only needed if any slide uses startSeconds/endSeconds
+  const YOUTUBE_VIDEO_ID = "";
+
+  let currentSlide = 0;
+
+  // ---- Dark / light mode ----
+  const THEME_KEY = 'sermonTheme';
+  const themeToggleBtn = document.getElementById('theme-toggle');
+
+  function applyTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    if(themeToggleBtn) themeToggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+
+  function getInitialTheme(){
+    try {
+      const saved = localStorage.getItem(THEME_KEY);
+      if(saved === 'dark' || saved === 'light') return saved;
+    } catch(e) {}
+    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  }
+
+  let currentTheme = getInitialTheme();
+  applyTheme(currentTheme);
+
+  if(themeToggleBtn){
+    themeToggleBtn.addEventListener('click', () => {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(currentTheme);
+      try { localStorage.setItem(THEME_KEY, currentTheme); } catch(e) {}
+    });
+  }
+
+  // ---- Keyboard navigation: arrow keys change slides, Escape closes the open popup ----
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target && e.target.tagName || '').toLowerCase();
+    if(tag === 'textarea' || tag === 'input') return; // don't hijack typing in a text field
+
+    if(e.key === 'ArrowLeft'){
+      if(currentSlide > 0) goToSlide(currentSlide - 1);
+    } else if(e.key === 'ArrowRight'){
+      if(currentSlide < slides.length - 1) goToSlide(currentSlide + 1);
+    } else if(e.key === 'Escape'){
+      if(videoPopup.isOpen()) videoPopup.close();
+      if(notesPopup.isOpen()) notesPopup.close();
+    }
+  });
+
+  // ---- Render slides from config ----
+  const stage = document.getElementById('stage');
+  const thumbsWrap = document.getElementById('thumbs');
+
+  const thumbGroups = [
+    { start: 1, end: 10, label: 'Slides 1–10' },
+    { start: 11, end: 20, label: 'Slides 11–20' },
+    { start: 21, end: slides.length - 1, label: `Slides 21–${slides.length - 1}` }
+  ].filter(group => group.start < slides.length);
+  const groupEls = new Map();
+  const groupItemsEls = new Map();
+
+  const introThumb = document.createElement('div');
+  introThumb.className = 'thumb';
+  introThumb.dataset.goto = '0';
+  introThumb.textContent = slides[0].thumbLabel || 'Introduction';
+  thumbsWrap.appendChild(introThumb);
+
+  thumbGroups.forEach(group => {
+    const groupEl = document.createElement('div');
+    groupEl.className = 'thumb-group';
+    groupEl.dataset.start = group.start;
+    groupEl.dataset.end = group.end;
+    groupEl.innerHTML = `
+      <button class="thumb-group-toggle" type="button" aria-expanded="false">${group.label}</button>
+      <div class="thumb-group-items"></div>
+    `;
+    const itemsEl = groupEl.querySelector('.thumb-group-items');
+    groupEl.querySelector('.thumb-group-toggle').addEventListener('click', () => {
+      const shouldOpen = !groupEl.classList.contains('open');
+      groupEls.forEach(otherGroup => otherGroup.classList.remove('open'));
+      groupEl.classList.toggle('open', shouldOpen);
+      groupEls.forEach(otherGroup => {
+        otherGroup.querySelector('.thumb-group-toggle').setAttribute(
+          'aria-expanded',
+          otherGroup.classList.contains('open') ? 'true' : 'false'
+        );
+      });
+      groupEl.querySelector('.thumb-group-toggle').setAttribute(
+        'aria-expanded',
+        groupEl.classList.contains('open') ? 'true' : 'false'
+      );
+    });
+    groupEls.set(group.start, groupEl);
+    groupItemsEls.set(group.start, itemsEl);
+    thumbsWrap.appendChild(groupEl);
+  });
+
+  let numberedCount = 0;
+  slides.forEach((s, i) => {
+    const slideEl = document.createElement('div');
+    const hasText = Boolean(s.heading || (s.bullets && s.bullets.length));
+    slideEl.className = 'slide' + (i === 0 ? ' active' : '') + (hasText ? ' has-text' : '');
+    slideEl.dataset.slide = i;
+    slideEl.style.backgroundImage = `url('${s.background}')`;
+
+    const bulletsHtml = (s.bullets || []).map(b => `<li>${b}</li>`).join('');
+    const markersHtml = (s.markers || []).map(m => `
+      <div class="verse-marker" style="top:${m.top}; left:${m.left};" data-verse="${m.verseKey}">Verse</div>
+    `).join('');
+    slideEl.innerHTML = `
+      <div class="slide-content">
+        <h2>${s.heading || ''}</h2>
+        <ul>${bulletsHtml}</ul>
+      </div>
+      ${markersHtml}
+    `;
+    stage.insertBefore(slideEl, document.getElementById('verse-tile'));
+
+    if(!s.thumbLabel) numberedCount++;
+
+    if(i === 0) return;
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb';
+    thumb.dataset.goto = i;
+    thumb.textContent = s.thumbLabel || numberedCount;
+    const group = thumbGroups.find(item => i >= item.start && i <= item.end);
+    groupItemsEls.get(group.start).appendChild(thumb);
+  });
+
+  // ---- Slide navigation ----
+  const counterEl = document.getElementById('counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const voiceBtn = document.getElementById('voice-btn');
+  const notesBtn = document.getElementById('notes-btn');
+
+  function goToSlide(i){
+    currentSlide = i;
+    const s = slides[i];
+    document.querySelectorAll('.slide').forEach(el => el.classList.toggle('active', +el.dataset.slide === i));
+    document.querySelectorAll('.thumb').forEach(t => t.classList.toggle('active', +t.dataset.goto === i));
+    const activeGroup = i === 0
+      ? null
+      : thumbGroups.find(group => i >= group.start && i <= group.end);
+    groupEls.forEach((groupEl, start) => {
+      const isOpen = activeGroup && start === activeGroup.start;
+      groupEl.classList.toggle('open', isOpen);
+      groupEl.querySelector('.thumb-group-toggle').setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    counterEl.textContent = `Slide ${i+1} of ${slides.length}`;
+    prevBtn.disabled = i === 0;
+    nextBtn.disabled = i === slides.length - 1;
+
+    // Notes button only when notes[] contains actual entries. Voice button always
+    // visible; the label stays the same and the popup shows an empty-state message
+    // when this slide has no timestamps / no video ID.
+    const hasNotes = Array.isArray(s.notes) && s.notes.length > 0;
+    notesBtn.hidden = !hasNotes;
+    voiceBtn.hidden = false;
+    voiceBtn.textContent = "▶ " + (s.voiceLabel || "Hear this slide");
+
+    // Keep open notes popup in sync when the user changes slides
+    const openNotesPopup = document.getElementById('notes-popup');
+    if(openNotesPopup && openNotesPopup.classList.contains('show')){
+      renderNotes(i);
+    }
+
+    hideVerseTile();
+  }
+
+  prevBtn.addEventListener('click', () => { if(currentSlide>0) goToSlide(currentSlide-1); });
+  nextBtn.addEventListener('click', () => { if(currentSlide<slides.length-1) goToSlide(currentSlide+1); });
+  thumbsWrap.addEventListener('click', (e) => {
+    const t = e.target.closest('.thumb');
+    if(t) goToSlide(+t.dataset.goto);
+  });
+
+  // ---- Swipe navigation (mobile): horizontal swipe on the stage ----
+  (function(){
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let tracking = false;
+    const MIN_SWIPE = 50;
+
+    stage.addEventListener('touchstart', (e) => {
+      if(e.touches.length !== 1) return;
+      // Don't steal swipes from scrollable popups / notes body
+      if(e.target.closest('.floating-popup, .notes-modal, .verse-tile')) return;
+      tracking = true;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    stage.addEventListener('touchend', (e) => {
+      if(!tracking) return;
+      tracking = false;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - touchStartX;
+      const dy = t.clientY - touchStartY;
+      if(Math.abs(dx) < MIN_SWIPE) return;
+      if(Math.abs(dx) < Math.abs(dy)) return; // vertical scroll, ignore
+      if(dx < 0){
+        if(currentSlide < slides.length - 1) goToSlide(currentSlide + 1);
+      } else {
+        if(currentSlide > 0) goToSlide(currentSlide - 1);
+      }
+    }, { passive: true });
+
+    stage.addEventListener('touchcancel', () => { tracking = false; }, { passive: true });
+  })();
+
+  // ---- Verse tiles ----
+  const tile = document.getElementById('verse-tile');
+  const tileRef = document.getElementById('verse-ref');
+  const tileText = document.getElementById('verse-text');
+  let openMarker = null;
+
+  function hideVerseTile(){
+    tile.classList.remove('show');
+    if(openMarker) openMarker.classList.remove('open');
+    openMarker = null;
+  }
+
+  stage.addEventListener('click', (e) => {
+    const marker = e.target.closest('.verse-inline, .verse-marker');
+    if(!marker){ hideVerseTile(); return; }
+
+    const key = marker.dataset.verse;
+    const v = verses[key];
+    if(!v) return;
+
+    tileRef.textContent = v.ref;
+    tileText.textContent = v.text;
+
+    const stageRect = stage.getBoundingClientRect();
+    const markerRect = marker.getBoundingClientRect();
+
+    tile.style.visibility = 'hidden';
+    tile.classList.add('show');
+    const tileHeight = tile.offsetHeight;
+
+    const spaceBelow = stageRect.bottom - markerRect.bottom;
+    const gap = 12;
+    let top;
+    if(spaceBelow >= tileHeight + gap){
+      top = markerRect.bottom - stageRect.top + gap;
+    } else {
+      top = markerRect.top - stageRect.top - tileHeight - gap;
+      if(top < gap) top = gap;
+    }
+    tile.style.top = top + 'px';
+    tile.style.left = Math.max(gap, Math.min(
+      markerRect.left - stageRect.left,
+      stageRect.width - 256 - gap
+    )) + 'px';
+    tile.style.visibility = '';
+    tile.classList.add('show');
+
+    if(openMarker) openMarker.classList.remove('open');
+    marker.classList.add('open');
+    openMarker = marker;
+  });
+
+  // =========================================================
+  // Resize handle (bottom-right) for popups / modal
+  // =========================================================
+  function makeResizable(el, handle, opts){
+    if(!el || !handle) return;
+    const minW = (opts && opts.minWidth) || 240;
+    const minH = (opts && opts.minHeight) || 160;
+    const sizeKey = (opts && opts.sizeKey) || null;
+    const onResize = opts && opts.onResize;
+
+    // Restore saved size
+    if(sizeKey){
+      try {
+        const saved = JSON.parse(localStorage.getItem(sizeKey) || 'null');
+        if(saved && saved.width && saved.height){
+          el.style.width = saved.width + 'px';
+          el.style.height = saved.height + 'px';
+          el.classList.add('resized');
+        }
+      } catch(e) {}
+    }
+
+    let resizing = false;
+    let startX = 0, startY = 0, startW = 0, startH = 0;
+
+    handle.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      resizing = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      const rect = el.getBoundingClientRect();
+      startW = rect.width;
+      startH = rect.height;
+      // If modal still uses transform centering, switch to absolute coords first
+      if(el.style.transform && el.style.transform !== 'none'){
+        el.style.transform = 'none';
+        el.style.left = rect.left + 'px';
+        el.style.top = rect.top + 'px';
+      }
+      handle.setPointerCapture(e.pointerId);
+    });
+
+    handle.addEventListener('pointermove', (e) => {
+      if(!resizing) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      let newW = Math.max(minW, startW + dx);
+      let newH = Math.max(minH, startH + dy);
+      // Keep inside viewport
+      const left = el.getBoundingClientRect().left;
+      const top = el.getBoundingClientRect().top;
+      newW = Math.min(newW, window.innerWidth - left - 8);
+      newH = Math.min(newH, window.innerHeight - top - 8);
+      el.style.width = newW + 'px';
+      el.style.height = newH + 'px';
+      el.classList.add('resized');
+      if(onResize) onResize(newW, newH);
+    });
+
+    function endResize(e){
+      if(!resizing) return;
+      resizing = false;
+      if(handle.hasPointerCapture && e && handle.hasPointerCapture(e.pointerId)){
+        handle.releasePointerCapture(e.pointerId);
+      }
+      if(sizeKey){
+        try {
+          const rect = el.getBoundingClientRect();
+          localStorage.setItem(sizeKey, JSON.stringify({ width: rect.width, height: rect.height }));
+        } catch(err) {}
+      }
+    }
+    handle.addEventListener('pointerup', endResize);
+    handle.addEventListener('pointercancel', endResize);
+  }
+
+  // =========================================================
+  // TWO INDEPENDENT FLOATING POPUPS (video clip + sermon notes)
+  // Each has its own show/hide state, its own drag handling, and its
+  // own remembered position — both can be open and moved at once.
+  // =========================================================
+  function makeFloatingPopup({ el, headerEl, closeEl, triggerBtn, defaultWidth, estimatedHeight, posKey, onOpen, onClose }){
+    let dragging = false;
+    let dragOffsetX = 0, dragOffsetY = 0;
+    let positioned = false;
+
+    function applySavedPosition(){
+      try {
+        const saved = JSON.parse(localStorage.getItem(posKey) || 'null');
+        if(saved && typeof saved.left === 'number' && typeof saved.top === 'number'){
+          el.style.left = saved.left + 'px';
+          el.style.top = saved.top + 'px';
+          positioned = true;
+        }
+      } catch(e) {}
+    }
+    applySavedPosition();
+
+    function savePosition(){
+      try {
+        const rect = el.getBoundingClientRect();
+        localStorage.setItem(posKey, JSON.stringify({ left: rect.left, top: rect.top }));
+      } catch(e) {}
+    }
+
+    function positionNearButton(){
+      const btnRect = triggerBtn.getBoundingClientRect();
+      const width = Math.min(defaultWidth, window.innerWidth - 24);
+      let left = btnRect.left + (btnRect.width / 2) - (width / 2);
+      left = Math.max(12, Math.min(left, window.innerWidth - width - 12));
+      // On small screens, pin near the middle/bottom so controls stay reachable
+      if(window.innerWidth <= 560){
+        const maxH = el.id === 'notes-popup' ? window.innerHeight * 0.48 : estimatedHeight;
+        let top = Math.max(12, (window.innerHeight - maxH) / 2);
+        el.style.left = left + 'px';
+        el.style.top = top + 'px';
+        return;
+      }
+      let top = btnRect.top - estimatedHeight - 12;
+      if(top < 12) top = btnRect.bottom + 12;
+      el.style.left = left + 'px';
+      el.style.top = top + 'px';
+    }
+
+    function open(){
+      // Re-position on mobile every open so a tall saved position doesn't cover the page
+      if(!positioned || window.innerWidth <= 560) positionNearButton();
+      el.classList.add('show');
+      if(onOpen) onOpen();
+    }
+    function close(){
+      el.classList.remove('show');
+      if(onClose) onClose();
+    }
+
+    triggerBtn.addEventListener('click', open);
+    closeEl.addEventListener('click', close);
+
+    headerEl.addEventListener('pointerdown', (e) => {
+      if(e.target.closest('.floating-popup-close')) return;
+      dragging = true;
+      const rect = el.getBoundingClientRect();
+      dragOffsetX = e.clientX - rect.left;
+      dragOffsetY = e.clientY - rect.top;
+      headerEl.setPointerCapture(e.pointerId);
+    });
+    headerEl.addEventListener('pointermove', (e) => {
+      if(!dragging) return;
+      let left = e.clientX - dragOffsetX;
+      let top = e.clientY - dragOffsetY;
+      left = Math.max(0, Math.min(left, window.innerWidth - el.offsetWidth));
+      top = Math.max(0, Math.min(top, window.innerHeight - el.offsetHeight));
+      el.style.left = left + 'px';
+      el.style.top = top + 'px';
+    });
+    function endDrag(e){
+      dragging = false;
+      if(headerEl.hasPointerCapture && e && headerEl.hasPointerCapture(e.pointerId)){
+        headerEl.releasePointerCapture(e.pointerId);
+      }
+      positioned = true;
+      savePosition();
+    }
+    headerEl.addEventListener('pointerup', endDrag);
+    headerEl.addEventListener('pointercancel', endDrag);
+
+    return {
+      open, close,
+      isOpen: () => el.classList.contains('show')
+    };
+  }
+
+  // ---- Video popup ----
+  const videoPopupEl = document.getElementById('video-popup');
+  const videoPopupHeader = document.getElementById('video-popup-header');
+  const videoPopupClose = document.getElementById('video-popup-close');
+
+  let ytPlayer = null;
+  let playerReady = false;
+  let pendingPlay = null;
+  let endWatcher = null;
+
+  function clearEndWatcher(){
+    if(endWatcher){ clearInterval(endWatcher); endWatcher = null; }
+  }
+
+  function watchForEnd(endSeconds){
+    clearEndWatcher();
+    endWatcher = setInterval(() => {
+      if(!ytPlayer || !ytPlayer.getCurrentTime) return;
+      if(ytPlayer.getCurrentTime() >= endSeconds){
+        ytPlayer.pauseVideo();
+        clearEndWatcher();
+      }
+    }, 500);
+  }
+
+  function playClip(start, end){
+    if(!playerReady){
+      pendingPlay = { start, end };
+      return;
+    }
+    ytPlayer.loadVideoById({ videoId: YOUTUBE_VIDEO_ID, startSeconds: start, endSeconds: end });
+    watchForEnd(end);
+  }
+
+  const videoEmptyEl = document.getElementById('video-empty');
+  const ytPlayerEl = document.getElementById('yt-player');
+
+  const videoPopup = makeFloatingPopup({
+    el: videoPopupEl,
+    headerEl: videoPopupHeader,
+    closeEl: videoPopupClose,
+    triggerBtn: voiceBtn,
+    defaultWidth: 640,
+    estimatedHeight: (Math.min(640, window.innerWidth - 24) * 9 / 16) + 44,
+    posKey: 'videoPopupPosition',
+    onOpen: () => {
+      const s = slides[currentSlide];
+      const hasVideo = s.startSeconds !== undefined && s.endSeconds !== undefined
+        && YOUTUBE_VIDEO_ID && YOUTUBE_VIDEO_ID.trim() !== '';
+      if(hasVideo){
+        if(videoEmptyEl) videoEmptyEl.classList.remove('show');
+        if(ytPlayerEl) ytPlayerEl.style.display = '';
+        playClip(s.startSeconds, s.endSeconds);
+      } else {
+        if(ytPlayerEl) ytPlayerEl.style.display = 'none';
+        if(videoEmptyEl) videoEmptyEl.classList.add('show');
+        clearEndWatcher();
+        if(ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
+      }
+    },
+    onClose: () => {
+      clearEndWatcher();
+      if(ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
+      if(videoEmptyEl) videoEmptyEl.classList.remove('show');
+      if(ytPlayerEl) ytPlayerEl.style.display = '';
+    }
+  });
+
+  // ---- YouTube IFrame API setup (harmless if no slide ever uses video) ----
+  const tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.body.appendChild(tag);
+
+  window.onYouTubeIframeAPIReady = function(){
+    ytPlayer = new YT.Player('yt-player', {
+      videoId: YOUTUBE_VIDEO_ID,
+      playerVars: { rel: 0, playsinline: 1 },
+      events: {
+        onReady: function(){
+          playerReady = true;
+          if(pendingPlay){
+            playClip(pendingPlay.start, pendingPlay.end);
+            pendingPlay = null;
+          }
+        }
+      }
+    });
+  };
+
+  // ---- Notes popup ----
+  const notesPopupEl = document.getElementById('notes-popup');
+  const notesPopupHeader = document.getElementById('notes-popup-header');
+  const notesPopupClose = document.getElementById('notes-popup-close');
+  const notesBody = document.getElementById('notes-popup-body');
+
+  function renderNotes(i){
+    const notes = slides[i].notes || [];
+    if(notes.length === 0){
+      notesBody.innerHTML = `<p class="empty-note">No notes added for this slide yet.</p>`;
+      return;
+    }
+    notesBody.innerHTML = `<ul>${notes.map(n => `<li>${n}</li>`).join('')}</ul>`;
+  }
+
+  const notesPopup = makeFloatingPopup({
+    el: notesPopupEl,
+    headerEl: notesPopupHeader,
+    closeEl: notesPopupClose,
+    triggerBtn: notesBtn,
+    defaultWidth: 420,
+    estimatedHeight: 260,
+    posKey: 'notesPopupPosition',
+    onOpen: () => renderNotes(currentSlide),
+    onClose: () => {}
+  });
+
+  makeResizable(videoPopupEl, document.getElementById('video-resize-handle'), {
+    minWidth: 280,
+    minHeight: 200,
+    sizeKey: 'videoPopupSize'
+  });
+  makeResizable(notesPopupEl, document.getElementById('notes-resize-handle'), {
+    minWidth: 260,
+    minHeight: 160,
+    sizeKey: 'notesPopupSize'
+  });
+
+  // ---- Password-protected discussion guide ----
+  const guidePopupEl = document.getElementById('discussion-guide-popup');
+  const guideHeader = document.getElementById('discussion-guide-header');
+  const guideClose = document.getElementById('discussion-guide-close');
+  const guideTrigger = document.getElementById('discussion-guide-link');
+  const guideAuth = document.getElementById('guide-auth');
+  const guideContent = document.getElementById('guide-content');
+  const guideFooter = document.getElementById('guide-footer');
+  const guidePassword = document.getElementById('guide-password');
+  const guideSubmit = document.getElementById('guide-submit');
+  const guideError = document.getElementById('guide-error');
+  const guideDownload = document.getElementById('guide-download');
+  const guideNewTab = document.getElementById('guide-new-tab');
+
+  function resetDiscussionGuide(){
+    guideAuth.hidden = false;
+    guideContent.hidden = true;
+    guideFooter.hidden = true;
+    guidePassword.value = '';
+    guideError.textContent = '';
+  }
+
+  function unlockDiscussionGuide(){
+    if(guidePassword.value !== 'ffalead'){
+      guideError.textContent = 'Incorrect password. Please try again.';
+      guidePassword.focus();
+      return;
+    }
+    guideAuth.hidden = true;
+    guideContent.hidden = false;
+    guideFooter.hidden = false;
+    guideError.textContent = '';
+  }
+
+  const guidePopup = makeFloatingPopup({
+    el: guidePopupEl,
+    headerEl: guideHeader,
+    closeEl: guideClose,
+    triggerBtn: guideTrigger,
+    defaultWidth: 560,
+    estimatedHeight: 410,
+    posKey: 'discussionGuidePosition',
+    onOpen: () => {
+      resetDiscussionGuide();
+      guidePassword.focus();
+    },
+    onClose: resetDiscussionGuide
+  });
+
+  guideSubmit.addEventListener('click', unlockDiscussionGuide);
+  guidePassword.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter') unlockDiscussionGuide();
+  });
+  guideDownload.addEventListener('click', () => {
+    const html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>FG Lesson and Personal Reflection Guide</title></head><body>'
+      + guideContent.innerHTML + '</body></html>';
+    const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'FG Lesson - We Grow Better Together.doc';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+  guideNewTab.addEventListener('click', () => {
+    const newTab = window.open('', '_blank');
+    if(!newTab){
+      guideError.textContent = 'Your browser blocked the new tab. Please allow pop-ups for this site.';
+      return;
+    }
+    const sermonTitle = ((document.querySelector('header h1') || {}).textContent || 'Sermon')
+      .split('|')[0].trim();
+    const guideTitle = `${sermonTitle} | Discussion Guide`;
+    newTab.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${guideTitle}</title><style>
+      body{margin:0;padding:28px;background:#f4efe6;color:#2b261f;font:16px/1.6 Georgia,serif}
+      main{max-width:820px;margin:0 auto;background:#fffdf8;padding:28px 34px;box-shadow:0 8px 28px rgba(43,38,32,.15)}
+      h2{margin-top:0} h3{color:#a9793f;border-top:1px solid #ddd2c2;padding-top:16px;margin-top:22px}
+      .guide-subtitle{color:#71695d;font:14px/1.5 Arial,sans-serif}
+    </style></head><body><main><h1>${guideTitle}</h1>${guideContent.innerHTML}</main></body></html>`);
+    newTab.document.close();
+  });
+  try {
+    localStorage.removeItem('discussionGuideSize');
+  } catch(e) {}
+  makeResizable(guidePopupEl, document.getElementById('discussion-guide-resize-handle'), {
+    minWidth: 300,
+    minHeight: 260,
+    sizeKey: 'discussionGuideSizeV2'
+  });
+
+  // =========================================================
+  // "WRITE YOUR THOUGHTS" — personal notes, autosaved + downloadable
+  // Not part of the sermon config; this is a viewer-facing scratchpad.
+  // Saved to this browser's localStorage only (per sermon page), and
+  // can be downloaded as a plain .txt or a Word-openable .doc file,
+  // both prefixed with the sermon title/date as a header.
+  // =========================================================
+  (function(){
+    const STORAGE_KEY = 'sermonThoughts';
+    const link = document.getElementById('my-notes-link');
+    const overlay = document.getElementById('notes-modal-overlay');
+    const closeBtn = document.getElementById('notes-modal-close');
+    const minimizeBtn = document.getElementById('notes-modal-minimize');
+    const minimizedBtn = document.getElementById('notes-modal-minimized');
+    const textarea = document.getElementById('my-notes-textarea');
+    const saveHint = document.getElementById('notes-save-hint');
+    const txtBtn = document.getElementById('download-txt-btn');
+    const wordBtn = document.getElementById('download-word-btn');
+    const emailBtn = document.getElementById('email-notes-btn');
+    const copyBtn = document.getElementById('copy-notes-btn');
+
+    const sermonTitle = (document.querySelector('header h1') || {}).textContent || 'Sermon';
+    const eyebrow = (document.querySelector('header .eyebrow') || {}).textContent || '';
+
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if(saved) textarea.value = saved;
+    } catch(e) {}
+
+    let saveTimeout = null;
+    textarea.addEventListener('input', () => {
+      saveHint.textContent = 'Saving…';
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        try {
+          localStorage.setItem(STORAGE_KEY, textarea.value);
+          saveHint.textContent = 'Saved automatically on this device.';
+        } catch(e) {
+          saveHint.textContent = 'Could not save automatically on this device.';
+        }
+      }, 400);
+    });
+
+    function openNotesModal(){
+      overlay.classList.remove('minimized');
+      overlay.classList.add('show');
+      textarea.focus();
+    }
+    function closeNotesModal(){
+      overlay.classList.remove('show');
+      overlay.classList.remove('minimized');
+    }
+    function minimizeNotesModal(){
+      if(overlay.classList.contains('minimizing')) return;
+      ensureAbsolutePosition();
+      const modalRect = modalEl.getBoundingClientRect();
+      const stageRect = stage.getBoundingClientRect();
+      const buttonGap = 6;
+      const targetX = stageRect.right - buttonGap - 21;
+      const targetY = stageRect.top + buttonGap + 21;
+      const modalCenterX = modalRect.left + (modalRect.width / 2);
+      const modalCenterY = modalRect.top + (modalRect.height / 2);
+      modalEl.style.setProperty('--minimize-x', (targetX - modalCenterX) + 'px');
+      modalEl.style.setProperty('--minimize-y', (targetY - modalCenterY) + 'px');
+      overlay.classList.add('minimizing');
+    }
+    function restoreNotesModal(){
+      overlay.classList.remove('minimized');
+      overlay.classList.add('show');
+      modalEl.classList.remove('notes-modal-restored');
+      void modalEl.offsetWidth;
+      modalEl.classList.add('notes-modal-restored');
+      textarea.focus();
+    }
+    function positionMinimizedButton(){
+      if(!overlay.classList.contains('minimized')) return;
+      const stageRect = stage.getBoundingClientRect();
+      const buttonGap = 6;
+      minimizedBtn.style.left = (stageRect.right - buttonGap - minimizedBtn.offsetWidth) + 'px';
+      minimizedBtn.style.top = (stageRect.top + buttonGap) + 'px';
+      minimizedBtn.style.right = 'auto';
+      minimizedBtn.style.bottom = 'auto';
+    }
+    link.addEventListener('click', openNotesModal);
+    closeBtn.addEventListener('click', closeNotesModal);
+    minimizeBtn.addEventListener('click', minimizeNotesModal);
+    minimizedBtn.addEventListener('click', restoreNotesModal);
+    window.addEventListener('scroll', positionMinimizedButton, { passive: true });
+    window.addEventListener('resize', positionMinimizedButton);
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && overlay.classList.contains('show')) closeNotesModal();
+    });
+
+    function safeFileName(){
+      return (sermonTitle.trim() || 'Sermon').replace(/[\\/:*?"<>|]/g, '').trim() || 'Sermon';
+    }
+
+    function downloadBlob(blob, filename){
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function getNotesText(){
+      const header = sermonTitle.trim() + (eyebrow.trim() ? ' — ' + eyebrow.trim() : '') + '\n' + '='.repeat(40) + '\n\n';
+      return header + (textarea.value || '(No notes written)');
+    }
+
+    function showCopyStatus(message){
+      const originalLabel = copyBtn.textContent;
+      copyBtn.textContent = message;
+      copyBtn.disabled = true;
+      setTimeout(() => {
+        copyBtn.textContent = originalLabel;
+        copyBtn.disabled = false;
+      }, 1800);
+    }
+
+    copyBtn.addEventListener('click', async () => {
+      const content = textarea.value;
+      try {
+        if(navigator.clipboard && window.isSecureContext){
+          await navigator.clipboard.writeText(content);
+        } else {
+          const copyArea = document.createElement('textarea');
+          copyArea.value = content;
+          copyArea.setAttribute('readonly', '');
+          copyArea.style.position = 'fixed';
+          copyArea.style.opacity = '0';
+          document.body.appendChild(copyArea);
+          copyArea.select();
+          const copied = document.execCommand('copy');
+          document.body.removeChild(copyArea);
+          if(!copied) throw new Error('Clipboard copy was not supported.');
+        }
+        showCopyStatus('Copied!');
+      } catch(e) {
+        showCopyStatus('Copy failed');
+      }
+    });
+
+    txtBtn.addEventListener('click', () => {
+      const content = getNotesText();
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      downloadBlob(blob, safeFileName() + ' - My Notes.txt');
+    });
+
+    wordBtn.addEventListener('click', () => {
+      const escaped = (textarea.value || '(No notes written)')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const bodyHtml = '<h1 style="font-family:Georgia,serif;">' + sermonTitle.trim() + '</h1>'
+        + (eyebrow.trim() ? '<p style="color:#5B5347;font-size:13px;">' + eyebrow.trim() + '</p>' : '')
+        + '<hr>'
+        + '<p style="white-space:pre-wrap;font-family:Georgia,serif;font-size:14px;line-height:1.6;">' + escaped + '</p>';
+      const html = '<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" '
+        + 'xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'
+        + '<head><meta charset="utf-8"><title>' + sermonTitle.trim() + '</title></head>'
+        + '<body>' + bodyHtml + '</body></html>';
+      const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+      downloadBlob(blob, safeFileName() + ' - My Notes.doc');
+    });
+
+    emailBtn.addEventListener('click', () => {
+      const bodyText = getNotesText();
+      const subject = encodeURIComponent('My Notes: ' + sermonTitle.trim());
+      const body = encodeURIComponent(bodyText);
+      window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
+    });
+
+    // ---- Drag the notes modal around (mouse + touch via Pointer Events) ----
+    const modalHeader = document.getElementById('notes-modal-header');
+    const modalEl = document.querySelector('.notes-modal');
+    modalEl.addEventListener('animationend', () => {
+      if(overlay.classList.contains('minimizing')){
+        overlay.classList.remove('minimizing');
+        overlay.classList.add('minimized');
+        positionMinimizedButton();
+        return;
+      }
+      modalEl.classList.remove('notes-modal-restored');
+    });
+    let notesDragging = false;
+    let notesDragOffsetX = 0, notesDragOffsetY = 0;
+    let notesPositioned = false;
+
+    function ensureAbsolutePosition(){
+      if(notesPositioned) return;
+      const rect = modalEl.getBoundingClientRect();
+      modalEl.style.transform = 'none';
+      modalEl.style.top = rect.top + 'px';
+      modalEl.style.left = rect.left + 'px';
+      notesPositioned = true;
+    }
+
+    modalHeader.addEventListener('pointerdown', (e) => {
+      if(e.target.closest('.notes-modal-close, .notes-modal-minimize')) return;
+      ensureAbsolutePosition();
+      notesDragging = true;
+      const rect = modalEl.getBoundingClientRect();
+      notesDragOffsetX = e.clientX - rect.left;
+      notesDragOffsetY = e.clientY - rect.top;
+      modalHeader.setPointerCapture(e.pointerId);
+    });
+    modalHeader.addEventListener('pointermove', (e) => {
+      if(!notesDragging) return;
+      let left = e.clientX - notesDragOffsetX;
+      let top = e.clientY - notesDragOffsetY;
+      left = Math.max(0, Math.min(left, window.innerWidth - modalEl.offsetWidth));
+      top = Math.max(0, Math.min(top, window.innerHeight - modalEl.offsetHeight));
+      modalEl.style.left = left + 'px';
+      modalEl.style.top = top + 'px';
+    });
+    function endNotesDrag(e){
+      notesDragging = false;
+      if(modalHeader.hasPointerCapture && e && modalHeader.hasPointerCapture(e.pointerId)){
+        modalHeader.releasePointerCapture(e.pointerId);
+      }
+    }
+    modalHeader.addEventListener('pointerup', endNotesDrag);
+    modalHeader.addEventListener('pointercancel', endNotesDrag);
+
+    makeResizable(modalEl, document.getElementById('thoughts-resize-handle'), {
+      minWidth: 280,
+      minHeight: 280,
+      sizeKey: 'thoughtsModalSize',
+      onResize: function(){ ensureAbsolutePosition(); }
+    });
+  })();
+
+  goToSlide(0);
+
+  // ---- First-visit product walkthrough ----
+  (function(){
+    const STORAGE_KEY = 'interactiveSermonWalkthroughV1Dismissed';
+    const overlay = document.getElementById('walkthrough-overlay');
+    const spotlight = document.getElementById('walkthrough-spotlight');
+    const card = document.getElementById('walkthrough-card');
+    const title = document.getElementById('walkthrough-title');
+    const description = document.getElementById('walkthrough-description');
+    const backBtn = document.getElementById('walkthrough-back');
+    const nextBtn = document.getElementById('walkthrough-next');
+    const skipBtn = document.getElementById('walkthrough-skip');
+    const dismiss = document.getElementById('walkthrough-dismiss');
+    const helpBtn = document.getElementById('walkthrough-help');
+    const steps = [
+      { target: null, title: 'Welcome to Interactive Sermon Notes', description: 'Read through the Sermon Notes slide by slide, listen to available audio or read through the notes and write personal reflection.' },
+      { target: '#stage', title: 'Explore the sermon slide', description: 'The current slide appears here. Tap Scripture markers when available to read the passage without leaving the sermon.' },
+      { target: '.nav-btns', title: 'Move through the message', description: 'You can use the Previous and Next buttons. For keyboard users, you may use the Arrow Keys. For mobile, swipe across the slide.' },
+      { target: '#thumbs', title: 'Jump to any slide', description: 'Use the slide thumbnails to jump directly to a section. On mobile, the thumbnails are grouped to keep the page compact.' },
+      { target: '#voice-btn', title: 'Hear this slide', description: 'When audio or video is available, this button opens the recording for the current portion of the sermon.' },
+      { target: '#notes-btn', title: 'Read sermon notes', description: 'Some slides include additional notes. When notes are available, this button opens them in a separate popup.' },
+      { target: '#my-notes-link', title: 'Write your thoughts', description: 'Keep personal reflections while you listen. Your thoughts are saved in this browser and can be copied or downloaded.' },
+      { target: '#discussion-guide-link', title: 'Open the Discussion Guide', description: 'Leaders can unlock the discussion guide and open it in a separate tab for group use.' },
+      { target: '#walkthrough-help', title: 'You are ready to explore', description: 'Click the 💡 button to open this tour again.' }
+    ];
+    let activeSteps = [];
+    let index = 0;
+
+    function isVisible(el){
+      return !!el && !el.hidden && getComputedStyle(el).display !== 'none';
+    }
+    function buildSteps(){
+      activeSteps = steps.filter(step => !step.target || isVisible(document.querySelector(step.target)));
+    }
+    function finish(){
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if(dismiss.checked) localStorage.setItem(STORAGE_KEY, 'true');
+      requestAnimationFrame(() => {
+        const stage = document.getElementById('stage');
+        if(stage) stage.scrollIntoView({ behavior:'smooth', block:'center', inline:'nearest' });
+      });
+    }
+    function positionCard(rect, centered, raised){
+      const margin = 14;
+      const cardWidth = Math.min(360, window.innerWidth - margin * 2);
+      card.style.width = cardWidth + 'px';
+      const cardHeight = card.offsetHeight;
+      if(centered || !rect){
+        const stage = document.getElementById('stage');
+        const stageRect = stage ? stage.getBoundingClientRect() : null;
+        if(raised && stageRect){
+          card.style.left = Math.max(margin, Math.min(window.innerWidth - cardWidth - margin, stageRect.left + (stageRect.width - cardWidth) / 2)) + 'px';
+          card.style.top = Math.max(margin, Math.min(window.innerHeight - cardHeight - margin, stageRect.top + (stageRect.height - cardHeight) / 2)) + 'px';
+        } else {
+          card.style.left = Math.max(margin, (window.innerWidth - cardWidth) / 2) + 'px';
+          card.style.top = Math.max(margin, (window.innerHeight - cardHeight) / 2) + 'px';
+        }
+        return;
+      }
+      const gap = 18;
+      const candidates = [
+        { left: Math.max(margin, Math.min(window.innerWidth - cardWidth - margin, rect.left)), top: rect.bottom + gap },
+        { left: Math.max(margin, Math.min(window.innerWidth - cardWidth - margin, rect.left)), top: rect.top - cardHeight - gap },
+        { left: rect.right + gap, top: rect.top },
+        { left: rect.left - cardWidth - gap, top: rect.top }
+      ];
+      const fits = candidates.find(candidate =>
+        candidate.left >= margin &&
+        candidate.left + cardWidth <= window.innerWidth - margin &&
+        candidate.top >= margin &&
+        candidate.top + cardHeight <= window.innerHeight - margin
+      );
+      const selected = fits || { left: (window.innerWidth - cardWidth) / 2, top: (window.innerHeight - cardHeight) / 2 };
+      let left = Math.max(margin, Math.min(window.innerWidth - cardWidth - margin, selected.left));
+      let top = Math.max(margin, Math.min(window.innerHeight - cardHeight - margin, selected.top));
+      card.style.left = left + 'px';
+      card.style.top = Math.max(margin, top) + 'px';
+    }
+    function render(){
+      const step = activeSteps[index];
+      const target = step.target ? document.querySelector(step.target) : null;
+      title.textContent = step.title;
+      description.textContent = step.description;
+      backBtn.hidden = index === 0;
+      nextBtn.textContent = index === activeSteps.length - 1 ? 'Done' : 'Next';
+      if(target){
+        target.scrollIntoView({ behavior:'auto', block:'center', inline:'nearest' });
+        requestAnimationFrame(() => renderPosition());
+      } else {
+        spotlight.style.display = 'none';
+        positionCard(null, false, index === 0);
+      }
+    }
+    function renderPosition(){
+      if(!activeSteps.length) return;
+      const step = activeSteps[index];
+      const target = step.target ? document.querySelector(step.target) : null;
+      if(!target){ spotlight.style.display = 'none'; positionCard(null, false, index === 0); return; }
+      const rect = target.getBoundingClientRect();
+      spotlight.style.display = 'block';
+      spotlight.style.left = Math.max(0, rect.left - 4) + 'px';
+      spotlight.style.top = Math.max(0, rect.top - 4) + 'px';
+      spotlight.style.width = rect.width + 8 + 'px';
+      spotlight.style.height = rect.height + 8 + 'px';
+      positionCard(rect, index === activeSteps.length - 1, index === 0 || index === activeSteps.length - 1);
+    }
+    function start(){
+      buildSteps();
+      index = 0;
+      dismiss.checked = false;
+      overlay.classList.add('show');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      render();
+    }
+    nextBtn.addEventListener('click', () => {
+      if(index >= activeSteps.length - 1){ finish(); return; }
+      index++; render();
+    });
+    backBtn.addEventListener('click', () => { if(index > 0){ index--; render(); } });
+    skipBtn.addEventListener('click', finish);
+    helpBtn.addEventListener('click', start);
+    window.addEventListener('resize', renderPosition);
+    if(localStorage.getItem(STORAGE_KEY) !== 'true') setTimeout(start, 450);
+  })();
+</script>
+</body>
+</html>
