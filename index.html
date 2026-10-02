@@ -1,6 +1,51 @@
-﻿<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FFA Interactive Sermons</title>
-<style>body{font-family:system-ui,sans-serif;max-width:480px;margin:40px auto;padding:0 16px}a{display:block;padding:14px;margin:8px 0;border:1px solid #ccc;border-radius:8px;text-decoration:none;color:#222}</style></head>
-<body><h1>FFA Interactive Sermons</h1>
-<a href="sermons/2026-09-27/">September 27, 2026</a>
-<a href="sermons/2026-09-20/">September 20, 2026 - One Another Christianity</a>
-<a href="sermons/2026-09-13/">September 13, 2026</a></body></html>
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FFA Interactive</title>
+<meta name="theme-color" content="#1E1B16">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icons/favicon.png">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<style>
+  :root{ --bg:#1E1B16; --card:#2A251E; --ink:#EDE6D6; --gold:#D9A75C; --line:#3a342b; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; min-height:100vh; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+  main{ max-width:520px; margin:0 auto; padding:32px 16px calc(32px + env(safe-area-inset-bottom)); }
+  header{ text-align:center; margin-bottom:24px; }
+  header img{ width:84px; height:84px; border-radius:50%; }
+  h1{ margin:12px 0 4px; font-size:24px; }
+  header p{ margin:0; color:var(--gold); font-size:14px; letter-spacing:.04em; }
+  a.sermon{ display:block; margin:10px 0; padding:16px; background:var(--card); border:1px solid var(--line); border-radius:12px; color:var(--ink); text-decoration:none; }
+  a.sermon:hover, a.sermon:focus-visible{ border-color:var(--gold); outline:none; }
+  a.sermon small{ display:block; color:var(--gold); font-size:12px; margin-bottom:4px; }
+  a.sermon strong{ font-size:16px; }
+  #install{ display:none; width:100%; margin-top:20px; padding:14px; border:0; border-radius:12px; background:var(--gold); color:#1E1B16; font:inherit; font-weight:700; cursor:pointer; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="assets/icons/icon-192.png" alt="Faith Fellowship Aurora">
+    <h1>FFA Interactive</h1>
+    <p>FAITH FELLOWSHIP AURORA</p>
+  </header>
+  <a class="sermon" href="sermons/2026-09-27/"><small>September 27, 2026</small><strong>Making Disciples</strong></a>
+  <a class="sermon" href="sermons/2026-09-20/"><small>September 20, 2026</small><strong>One Another Christianity</strong></a>
+  <a class="sermon" href="sermons/2026-09-13/"><small>September 13, 2026</small><strong>We Grow Better Together</strong></a>
+  <button id="install" type="button">Install the app</button>
+</main>
+<script>
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+  }
+  let deferred;
+  const btn = document.getElementById('install');
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; btn.style.display = 'block'; });
+  btn.addEventListener('click', async () => { if(!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; btn.style.display = 'none'; });
+  window.addEventListener('appinstalled', () => { btn.style.display = 'none'; });
+</script>
+</body>
+</html>
+
