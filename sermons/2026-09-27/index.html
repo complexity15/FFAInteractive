@@ -5448,10 +5448,9 @@
   })();
 </script>
 <script>
-/* Back-to-menu button: only inside the installed app, never when embedded in a website */
+/* Back-to-menu button: shown on the standalone page/app, never when embedded in a website */
 (function(){
-  var standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-  if(!standalone || window.self !== window.top) return;
+  if(window.self !== window.top) return;
   var st = document.createElement('style');
   st.textContent = '.app-home-btn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);left:6px;z-index:2147483000;display:flex;align-items:center;gap:4px;height:30px;padding:0 11px 0 8px;border:1px solid rgba(217,167,92,.6);border-radius:15px;background:rgba(30,27,22,.82);color:#EDE6D6;font:600 13px system-ui,sans-serif;text-decoration:none;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}.app-home-btn:active{background:rgba(30,27,22,.95)}body.fullscreen-fallback .app-home-btn{display:none}';
   document.head.appendChild(st);
