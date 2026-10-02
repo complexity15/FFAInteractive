@@ -21,6 +21,7 @@
   a.sermon:hover, a.sermon:focus-visible{ border-color:var(--gold); outline:none; }
   a.sermon small{ display:block; color:var(--gold); font-size:12px; margin-bottom:4px; }
   a.sermon strong{ font-size:16px; }
+  #install-note{ margin:10px 0 0; text-align:center; color:var(--gold); font-size:13px; }
   #install-help{ margin:12px 0 0; padding:12px 14px; background:var(--card); border:1px solid var(--gold); border-radius:12px; font-size:14px; line-height:1.5; }
   #install{ display:none; width:100%; margin-top:20px; padding:14px; border:0; border-radius:12px; background:var(--gold); color:#1E1B16; font:inherit; font-weight:700; cursor:pointer; }
 </style>
@@ -36,6 +37,7 @@
   <a class="sermon" href="sermons/2026-09-20/"><small>September 20, 2026</small><strong>One Another Christianity</strong></a>
   <a class="sermon" href="sermons/2026-09-13/"><small>September 13, 2026</small><strong>We Grow Better Together</strong></a>
   <button id="install" type="button">Install the app</button>
+  <p id="install-note">📱 On Android, please use <b>Chrome</b> to install this app.</p>
   <p id="install-help" hidden></p>
 </main>
 <script>
@@ -46,7 +48,7 @@
   const btn = document.getElementById('install');
   const help = document.getElementById('install-help');
   const installed = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-  if(!installed) btn.style.display = 'block';
+  if(!installed) btn.style.display = 'block'; else document.getElementById('install-note').hidden = true;
   window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; });
   btn.addEventListener('click', async () => {
     if(deferred){
@@ -60,8 +62,9 @@
       : 'Open the browser menu <b>⋮</b> (top right in Chrome) and tap <b>Install app</b> or <b>Add to Home screen</b>. Please open this page in Chrome, not inside another app.';
     help.hidden = false;
   });
-  window.addEventListener('appinstalled', () => { btn.style.display = 'none'; help.hidden = true; });</script>
+  window.addEventListener('appinstalled', () => { btn.style.display = 'none'; help.hidden = true; document.getElementById('install-note').hidden = true; });</script>
 </body>
 </html>
+
 
 
