@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>FFA Interactive</title>
 <meta name="theme-color" content="#1E1B16">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="FFA Interactive">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icons/favicon.png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
@@ -45,7 +49,7 @@
   <a class="sermon" href="sermons/2026-09-20/"><small>September 20, 2026</small><strong>One Another Christianity</strong><em>Tap to open the slides, notes and audio</em></a>
   <a class="sermon" href="sermons/2026-09-13/"><small>September 13, 2026</small><strong>We Grow Better Together</strong><em>Tap to open the slides and notes</em></a>
   <button id="install" type="button">Install the app</button>
-  <p id="install-note">📱 On Android, please use <b>Chrome</b> to install this app.</p>
+  <p id="install-note">📱 On Android, use <b>Chrome</b> to install. On iPhone or iPad, use <b>Safari</b>.</p>
   <p id="install-help" hidden></p>
 </main>
 <script>
@@ -73,6 +77,7 @@
   window.addEventListener('appinstalled', () => { btn.style.display = 'none'; help.hidden = true; document.getElementById('install-note').hidden = true; });</script>
 </body>
 </html>
+
 
 
 

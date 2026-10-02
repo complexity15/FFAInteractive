@@ -1,4 +1,4 @@
-﻿const CACHE = 'ffa-interactive-v7';
+﻿const CACHE = 'ffa-interactive-v8';
 const SHELL = [
   './',
   'index.html',
@@ -35,7 +35,7 @@ self.addEventListener('fetch', event => {
   // Pages: try the network first so updates show immediately; fall back to the saved copy offline.
   if (req.mode === 'navigate') {
     event.respondWith(
-      fetch(req).then(res => {
+      fetch(req, { cache: 'no-cache' }).then(res => {
         const copy = res.clone();
         caches.open(CACHE).then(c => c.put(req, copy));
         return res;
@@ -46,7 +46,7 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.open(CACHE).then(cache =>
       cache.match(req, { ignoreSearch: true }).then(cached => {
-        const network = fetch(req).then(res => {
+        const network = fetch(req, { cache: 'no-cache' }).then(res => {
           if (res.ok) cache.put(req, res.clone());
           return res;
         }).catch(() => cached);
@@ -55,6 +55,7 @@ self.addEventListener('fetch', event => {
     )
   );
 });
+
 
 
 
