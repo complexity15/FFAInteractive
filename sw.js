@@ -1,4 +1,4 @@
-﻿const CACHE = 'ffa-interactive-v8';
+﻿const CACHE = 'ffa-interactive-v9';
 const SHELL = [
   './',
   'index.html',
