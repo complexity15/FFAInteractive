@@ -16,6 +16,7 @@ Interactive sermon pages (slides, notes, audio clips, Theater mode, guided tour)
 - https://complexity15.github.io/FFAInteractive/sermons/2026-09-13/
 - https://complexity15.github.io/FFAInteractive/sermons/2026-09-20/
 - https://complexity15.github.io/FFAInteractive/sermons/2026-09-27/
+- - https://complexity15.github.io/FFAInteractive/sermons/2026-10-04/
 
 See [docs/HANDOFF.md](docs/HANDOFF.md) for project notes and the weekly workflow.
 
